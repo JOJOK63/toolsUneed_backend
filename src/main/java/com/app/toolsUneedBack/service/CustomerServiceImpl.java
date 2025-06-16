@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-//TODO gestion des erreurs
+//TODO gestion des erreurs ou du null ce qui va créeer des erreur coté angular
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
