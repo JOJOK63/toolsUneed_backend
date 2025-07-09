@@ -31,10 +31,17 @@ public class CustomerEntity {
     @Column(unique = true)
     private String email;
 
-    private Boolean role;
+    private String password;
+
+    @Enumerated(EnumType.STRING) // Stocke "USER" ou "ADMIN" en BDD
+    @Column(name = "role")
+    @Builder.Default // Valeur par défaut lors de la construction
+    private CustomerRole role = CustomerRole.USER;
 
 //    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 ////    @JsonManagedReference // Le parent sérialise les enfants
 //    @JsonIgnoreProperties("customer") // ignore uniquement le champ qui provoque la boucle
 //    private List<BudgetEntity> budgets;
+
+
 }

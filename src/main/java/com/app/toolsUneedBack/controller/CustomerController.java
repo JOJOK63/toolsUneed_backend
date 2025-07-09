@@ -21,8 +21,8 @@ public class CustomerController {
 
     @ResponseStatus(value = HttpStatus.CREATED) // permet de définir un code response
     @PostMapping(consumes = APPLICATION_JSON_VALUE) // permet de définir le type de données échangé
-    public void newCustomer(@RequestBody CustomerEntity customer){
-        this.customerService.newCustomer(customer);
+    public CustomerEntity newCustomer(@RequestBody CustomerEntity customer){
+       return this.customerService.newCustomer(customer);
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)

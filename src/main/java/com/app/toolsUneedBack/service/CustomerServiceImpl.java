@@ -2,7 +2,10 @@ package com.app.toolsUneedBack.service;
 
 import com.app.toolsUneedBack.entity.CustomerEntity;
 import com.app.toolsUneedBack.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,18 +14,24 @@ import java.util.Optional;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+//    @Autowired
+//    private BCryptPasswordEncoder passwordEncoder;
     private CustomerRepository customerRepository;
 
     public CustomerServiceImpl(CustomerRepository customerRepository){
         this.customerRepository = customerRepository;
     }
 
-    public void newCustomer(CustomerEntity customer){
-        CustomerEntity customerInBdd = this.customerRepository.findByEmail(customer.getEmail());
+    public CustomerEntity newCustomer(CustomerEntity customer){
 
+//        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+
+        CustomerEntity customerInBdd = this.customerRepository.findByEmail(customer.getEmail());
         if(customerInBdd == null){
             this.customerRepository.save(customer);
+            return customer;
         }
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Ce client existe déjà !");
     }
 
     public List<CustomerEntity> findAllCustomers(){
@@ -48,8 +57,10 @@ public class CustomerServiceImpl implements CustomerService {
             customerFromBDD.setFirstname(customer.getFirstname());
             customerFromBDD.setLastname(customer.getLastname());
             customerFromBDD.setEmail(customer.getEmail());
+            customerFromBDD.setPassword(customer.getPassword());
             customerFromBDD.setRole(customer.getRole());
             this.customerRepository.save(customerFromBDD);
         }
     }
+
 }
