@@ -59,6 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
             customerFromBDD.setEmail(customer.getEmail());
             customerFromBDD.setPassword(customer.getPassword());
             customerFromBDD.setRole(customer.getRole());
+            customerFromBDD.setImage(customer.getImage());
             this.customerRepository.save(customerFromBDD);
         }
     }
