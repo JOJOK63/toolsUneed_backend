@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
         return this.customerRepository.findAll();
     }
 
-    public CustomerEntity getCustomerById(Long id) {
+    public CustomerEntity findById(Long id) {
         Optional<CustomerEntity> optionalCustomer = this.customerRepository.findById(id);
         //optionnal permet de gérer le null, si optional existe alors on prend l'information à l'intérieur de  cette variable
         return optionalCustomer.orElse(null);
@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void editCustomer(Long id,CustomerEntity customer) {
-        CustomerEntity customerFromBDD = this.getCustomerById(id);
+        CustomerEntity customerFromBDD = this.findById(id);
 
         if(customer.getId() == customerFromBDD.getId()){
             customerFromBDD.setFirstname(customer.getFirstname());

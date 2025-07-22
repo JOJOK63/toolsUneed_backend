@@ -32,7 +32,7 @@ public class CustomerController {
 
     @GetMapping(path = "{id}", produces = APPLICATION_JSON_VALUE)
     public CustomerEntity getCustomerById(@PathVariable Long id){
-        return this.customerService.getCustomerById(id);
+        return this.customerService.findById(id);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)

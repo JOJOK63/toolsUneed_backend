@@ -1,4 +1,5 @@
 package com.app.toolsUneedBack.entity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = "customer")
 public class BudgetEntity {
 
     @Id
@@ -42,6 +44,6 @@ public class BudgetEntity {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
 //    @JsonBackReference // L'enfant ne sérialise pas le parent
-//    @JsonIgnoreProperties("budgets") // ignore uniquement le champ qui provoque la boucle
+   @JsonIgnoreProperties("budgets") // ignore uniquement le champ qui provoque la boucle
     private CustomerEntity customer;
 }

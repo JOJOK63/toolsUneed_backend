@@ -1,10 +1,8 @@
 package com.app.toolsUneedBack.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = "budget")
 public class TransactionEntity {
 
     @Id
@@ -41,6 +40,11 @@ public class TransactionEntity {
 
     @UpdateTimestamp
     private  LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "budget_id", nullable = false)
+//    @JsonIgnoreProperties("transactions") // Si tu décides plus tard de faire du bidirectionnel
+    private BudgetEntity budget;
 
 //    @ManyToOne
 //    @JoinColumn(name = "category_id", nullable = false)

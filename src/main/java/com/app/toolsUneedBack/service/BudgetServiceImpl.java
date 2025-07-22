@@ -24,7 +24,7 @@ public class BudgetServiceImpl implements BudgetService{
     @Override
     public void newBudget(BudgetEntity budget) {
         Long customerId =budget.getCustomer().getId();
-        CustomerEntity customer = this.customerService.getCustomerById(customerId);
+        CustomerEntity customer = this.customerService.findById(customerId);
         budget.setCustomer(customer);
         this.budgetRepository.save(budget);
     }
@@ -49,5 +49,22 @@ public class BudgetServiceImpl implements BudgetService{
         this.budgetRepository.deleteById(id);
     }
 
+    @Override
+    public void editBudget(Long id, BudgetEntity budget) {
+        BudgetEntity budgetFromBDD = this.findById(id);
 
+        if(budget.getId() == budgetFromBDD.getId()){
+            budgetFromBDD.setName(budget.getName());
+            budgetFromBDD.setDetail(budget.getDetail());
+            budgetFromBDD.setBalance(budget.getBalance());
+            budgetFromBDD.setActive(budget.isActive());
+            this.budgetRepository.save(budgetFromBDD);
+        }
+
+    }
+
+    @Override
+    public BudgetEntity getReferenceById(Long id) {
+        return budgetRepository.getReferenceById(id);
+    }
 }

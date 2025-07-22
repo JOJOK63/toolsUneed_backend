@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder // créer des objets facilement
+@ToString(exclude = "budgets")
 public class CustomerEntity {
 
 //    public CustomerEntity() {
@@ -55,10 +56,10 @@ public class CustomerEntity {
 
     private Boolean isActive;
 
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-////    @JsonManagedReference // Le parent sérialise les enfants
-//    @JsonIgnoreProperties("customer") // ignore uniquement le champ qui provoque la boucle
-//    private List<BudgetEntity> budgets;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @JsonManagedReference // Le parent sérialise les enfants
+    @JsonIgnoreProperties("customer") // ignore uniquement le champ qui provoque la boucle
+    private List<BudgetEntity> budgets = new ArrayList<>();;
 
 
 }

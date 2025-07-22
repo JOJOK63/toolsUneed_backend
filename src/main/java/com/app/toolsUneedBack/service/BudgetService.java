@@ -9,4 +9,7 @@ public interface BudgetService {
     List<BudgetEntity> findAllBudgets(Long customerId);
     BudgetEntity findById(Long id);
     void deleteBudget(Long id);
+    void editBudget(Long id, BudgetEntity budget);
+
+    BudgetEntity getReferenceById(Long id);
 }
