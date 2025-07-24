@@ -38,7 +38,7 @@ public class BudgetEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    private boolean isActive;
+    private Boolean isActive;
 
 //    @JsonIgnore
     @ManyToOne

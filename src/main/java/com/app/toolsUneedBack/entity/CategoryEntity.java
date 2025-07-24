@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "categories")
@@ -27,5 +32,7 @@ public class CategoryEntity {
     @Column(nullable = false)
     private String icon;
 
-    private boolean isActive;
+    private Boolean isActive = true;
+
+
 }

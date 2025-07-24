@@ -22,6 +22,8 @@ public class SubCategoryEntity {
     @Column(nullable = false)
     private String icon;
 
+    private Boolean isActive = true;
+
 //    @ManyToOne
 //    @JoinColumn(name = "category_id", nullable = false)
 //    private CategoryEntity category;

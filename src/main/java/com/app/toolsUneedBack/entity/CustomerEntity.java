@@ -54,7 +54,7 @@ public class CustomerEntity {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 //    @JsonManagedReference // Le parent sérialise les enfants

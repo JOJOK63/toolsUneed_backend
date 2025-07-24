@@ -57,7 +57,7 @@ public class BudgetServiceImpl implements BudgetService{
             budgetFromBDD.setName(budget.getName());
             budgetFromBDD.setDetail(budget.getDetail());
             budgetFromBDD.setBalance(budget.getBalance());
-            budgetFromBDD.setActive(budget.isActive());
+            budgetFromBDD.setIsActive(budget.getIsActive());
             this.budgetRepository.save(budgetFromBDD);
         }
 
