@@ -23,24 +23,13 @@ public class TransactionServiceImpl implements TransactionService{
 
     @Override
     public void newTransaction(TransactionEntity transaction) {
-        System.out.println("AVANT: " + transaction);
 
         Long budgetId = transaction.getBudget().getId();
         //proxy permet de simuler un objet
         BudgetEntity budgetProxy = budgetService.getReferenceById(budgetId);
-
-        System.out.println("Budget proxy créé pour ID: " + budgetId);
-
         transaction.setBudget(budgetProxy);
+        this.transactionRepository.save(transaction);
 
-        System.out.println("AVANT: Transaction ID=" + transaction.getId() +
-                ", Name=" + transaction.getName() +
-                ", Amount=" + transaction.getAmount());
-
-
-        TransactionEntity saved = this.transactionRepository.save(transaction);
-
-        System.out.println("APRES SAVE: " + saved);
     }
 
     @Override

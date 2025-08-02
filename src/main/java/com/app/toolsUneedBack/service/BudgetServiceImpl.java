@@ -23,7 +23,7 @@ public class BudgetServiceImpl implements BudgetService{
 
     @Override
     public void newBudget(BudgetEntity budget) {
-        Long customerId =budget.getCustomer().getId();
+        Long customerId = budget.getCustomer().getId();
         CustomerEntity customer = this.customerService.findById(customerId);
         budget.setCustomer(customer);
         this.budgetRepository.save(budget);

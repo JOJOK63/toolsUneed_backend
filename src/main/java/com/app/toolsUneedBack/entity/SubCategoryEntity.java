@@ -1,30 +1,31 @@
-package com.app.toolsUneedBack.entity;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+    package com.app.toolsUneedBack.entity;
+    import jakarta.persistence.*;
+    import lombok.AllArgsConstructor;
+    import lombok.Builder;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "subcategories")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class SubCategoryEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Entity
+    @Table(name = "subcategories")
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public class SubCategoryEntity {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    @Column(nullable = false)
-    private String name;
+        @Column(nullable = false)
+        private String name;
 
-    @Column(nullable = false)
-    private String icon;
+        @Column(nullable = false)
+        private String icon;
 
-    private Boolean isActive = true;
+        private Boolean isActive = true;
 
-//    @ManyToOne
-//    @JoinColumn(name = "category_id", nullable = false)
-//    private CategoryEntity category;
-}
+        @ManyToOne
+        @JoinColumn(name = "category_id", nullable = false)
+        private CategoryEntity category;
+
+    }

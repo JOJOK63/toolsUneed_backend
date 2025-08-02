@@ -10,4 +10,6 @@ public interface CategoryService {
     CategoryEntity findById(Long id);
     void deleteCategory(Long id);
     void editCategory(Long id, CategoryEntity category);
+
+    CategoryEntity getReferenceById(Long id);
 }

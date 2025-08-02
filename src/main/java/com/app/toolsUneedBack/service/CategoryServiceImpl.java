@@ -50,4 +50,9 @@ public class CategoryServiceImpl implements  CategoryService{
         }
     }
 
+    @Override
+    public CategoryEntity getReferenceById(Long id){
+        return categoryRepository.getReferenceById(id);
+    }
+
 }
