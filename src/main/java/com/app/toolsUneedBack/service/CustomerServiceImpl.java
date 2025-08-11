@@ -49,19 +49,30 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerRepository.deleteById(id);
     }
 
+
     @Override
-    public void editCustomer(Long id,CustomerEntity customer) {
+    public void editCustomer(Long id, CustomerEntity customer) {
+        // Récupère l'entité existante depuis la base de données
         CustomerEntity customerFromBDD = this.findById(id);
 
-        if(customer.getId() == customerFromBDD.getId()){
+        // Affiche l'entité pour le débogage
+        System.out.println(customerFromBDD);
+
+        if (customer.getId() == customerFromBDD.getId()) {
+            // Si le mot de passe dans le nouveau customer est null, on garde celui de la base
+            String passwordToSave = customer.getPassword() != null ? customer.getPassword() : customerFromBDD.getPassword();
+
             customerFromBDD.setFirstname(customer.getFirstname());
             customerFromBDD.setLastname(customer.getLastname());
             customerFromBDD.setEmail(customer.getEmail());
-            customerFromBDD.setPassword(customer.getPassword());
+            customerFromBDD.setPassword(passwordToSave);  // Utilisation du mot de passe récupéré en base
             customerFromBDD.setRole(customer.getRole());
             customerFromBDD.setImage(customer.getImage());
+
+            // Sauvegarde l'entité mise à jour
             this.customerRepository.save(customerFromBDD);
         }
     }
+
 
 }

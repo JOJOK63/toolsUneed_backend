@@ -61,5 +61,4 @@ public class CustomerEntity {
     @JsonIgnoreProperties("customer") // ignore uniquement le champ qui provoque la boucle
     private List<BudgetEntity> budgets = new ArrayList<>();;
 
-
 }

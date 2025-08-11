@@ -19,6 +19,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    //TODO faire le dto pour ne pas renvoyre le mdp du tout
     @ResponseStatus(value = HttpStatus.CREATED) // permet de définir un code response
     @PostMapping(consumes = APPLICATION_JSON_VALUE) // permet de définir le type de données échangé
     public CustomerEntity newCustomer(@RequestBody CustomerEntity customer){

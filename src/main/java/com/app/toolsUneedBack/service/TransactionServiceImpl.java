@@ -29,7 +29,6 @@ public class TransactionServiceImpl implements TransactionService{
         BudgetEntity budgetProxy = budgetService.getReferenceById(budgetId);
         transaction.setBudget(budgetProxy);
         this.transactionRepository.save(transaction);
-
     }
 
     @Override
