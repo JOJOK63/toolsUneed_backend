@@ -1,7 +1,9 @@
 package com.app.toolsUneedBack.service;
 
 import com.app.toolsUneedBack.entity.CategoryEntity;
+import com.app.toolsUneedBack.entity.SubCategoryEntity;
 import com.app.toolsUneedBack.repository.CategoryRepository;
+import com.app.toolsUneedBack.repository.SubCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,11 @@ import java.util.Optional;
 public class CategoryServiceImpl implements  CategoryService{
 
     private CategoryRepository categoryRepository;
+    private SubCategoryRepository subCategoryRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository,SubCategoryRepository subCategoryRepository) {
         this.categoryRepository = categoryRepository;
+        this.subCategoryRepository = subCategoryRepository;
     }
 
     @Override
@@ -33,8 +37,15 @@ public class CategoryServiceImpl implements  CategoryService{
     }
 
     @Override
-    public void deleteCategory(Long id) {
-        this.categoryRepository.deleteById(id);
+    public void deleteCategory(Long categoryId) {
+        // Vérifier s'il y a des sous-catégories liées
+        List<SubCategoryEntity> subCategories = subCategoryRepository.findByCategory_Id(categoryId);
+
+        if (!subCategories.isEmpty()) {
+            throw new IllegalStateException("Impossible de supprimer une catégorie qui contient des sous-catégories");
+        }
+
+        categoryRepository.deleteById(categoryId);
     }
 
     @Override

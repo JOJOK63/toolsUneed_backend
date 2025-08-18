@@ -3,6 +3,7 @@ package com.app.toolsUneedBack.controller;
 import com.app.toolsUneedBack.entity.CategoryEntity;
 import com.app.toolsUneedBack.service.CategoryService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,10 +37,18 @@ public class CategoryController {
         return this.categoryService.findById(id);
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @DeleteMapping(path = "{id}")
-    public void deleteCategory(@PathVariable Long id){
-        this.categoryService.deleteCategory(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        try {
+            categoryService.deleteCategory(id);
+            return ResponseEntity.ok("Catégorie supprimée avec succès");
+        } catch (IllegalStateException e) {
+            // ↑ L'exception est attrapée ici
+            return ResponseEntity.badRequest().body(e.getMessage());
+            // ↑ Retourne un HTTP 400 avec le message d'erreur
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erreur interne du serveur");
+        }
     }
 
     @PutMapping(path = "{id}", consumes = APPLICATION_JSON_VALUE)
