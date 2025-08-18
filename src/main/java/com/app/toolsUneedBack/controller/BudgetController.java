@@ -5,7 +5,6 @@ import com.app.toolsUneedBack.service.BudgetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -40,6 +39,11 @@ public class BudgetController {
     @DeleteMapping(path = "{id}")
     public void deleteBudget(@PathVariable Long id){
         this.budgetService.deleteBudget(id);
+    }
+
+    @PutMapping(path="{id}", consumes = APPLICATION_JSON_VALUE)
+    public void editBudget(@PathVariable Long id, @RequestBody BudgetEntity budget) {
+        this.budgetService.editBudget(id,budget);
     }
 
 }

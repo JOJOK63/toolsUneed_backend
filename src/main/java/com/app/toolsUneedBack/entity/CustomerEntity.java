@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder // créer des objets facilement
+@ToString(exclude = "budgets")
 public class CustomerEntity {
 
 //    public CustomerEntity() {
@@ -24,17 +28,37 @@ public class CustomerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String firstname;
 
+    @Column(nullable = false)
     private String lastname;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    private Boolean role;
+    @Column(nullable = false)
+    private String password;
 
-//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-////    @JsonManagedReference // Le parent sérialise les enfants
-//    @JsonIgnoreProperties("customer") // ignore uniquement le champ qui provoque la boucle
-//    private List<BudgetEntity> budgets;
+    @Enumerated(EnumType.STRING) // Stocke "USER" ou "ADMIN" en BDD
+    @Column(name = "role",nullable = false)
+    @Builder.Default // Valeur par défaut lors de la construction
+    private CustomerRole role = CustomerRole.USER;
+
+    @Column(nullable = false)
+    private String image;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    private Boolean isActive = true;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @JsonManagedReference // Le parent sérialise les enfants
+    @JsonIgnoreProperties("customer") // ignore uniquement le champ qui provoque la boucle
+    private List<BudgetEntity> budgets = new ArrayList<>();;
+
 }

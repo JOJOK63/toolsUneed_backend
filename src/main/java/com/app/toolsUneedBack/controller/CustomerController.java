@@ -19,10 +19,11 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    //TODO faire le dto pour ne pas renvoyre le mdp du tout
     @ResponseStatus(value = HttpStatus.CREATED) // permet de définir un code response
     @PostMapping(consumes = APPLICATION_JSON_VALUE) // permet de définir le type de données échangé
-    public void newCustomer(@RequestBody CustomerEntity customer){
-        this.customerService.newCustomer(customer);
+    public CustomerEntity newCustomer(@RequestBody CustomerEntity customer){
+       return this.customerService.newCustomer(customer);
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -32,7 +33,7 @@ public class CustomerController {
 
     @GetMapping(path = "{id}", produces = APPLICATION_JSON_VALUE)
     public CustomerEntity getCustomerById(@PathVariable Long id){
-        return this.customerService.getCustomerById(id);
+        return this.customerService.findById(id);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)

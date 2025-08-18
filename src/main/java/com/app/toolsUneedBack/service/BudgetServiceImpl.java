@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-//TODO gestion des erreurs
+//TODO gestion des erreurs ou du null ce qui va créeer des erreur coté angular
 
 @Service
 public class BudgetServiceImpl implements BudgetService{
@@ -23,8 +23,8 @@ public class BudgetServiceImpl implements BudgetService{
 
     @Override
     public void newBudget(BudgetEntity budget) {
-        Long customerId =budget.getCustomer().getId();
-        CustomerEntity customer = this.customerService.getCustomerById(customerId);
+        Long customerId = budget.getCustomer().getId();
+        CustomerEntity customer = this.customerService.findById(customerId);
         budget.setCustomer(customer);
         this.budgetRepository.save(budget);
     }
@@ -49,5 +49,22 @@ public class BudgetServiceImpl implements BudgetService{
         this.budgetRepository.deleteById(id);
     }
 
+    @Override
+    public void editBudget(Long id, BudgetEntity budget) {
+        BudgetEntity budgetFromBDD = this.findById(id);
 
+        if(budget.getId() == budgetFromBDD.getId()){
+            budgetFromBDD.setName(budget.getName());
+            budgetFromBDD.setDetail(budget.getDetail());
+            budgetFromBDD.setBalance(budget.getBalance());
+            budgetFromBDD.setIsActive(budget.getIsActive());
+            this.budgetRepository.save(budgetFromBDD);
+        }
+
+    }
+
+    @Override
+    public BudgetEntity getReferenceById(Long id) {
+        return budgetRepository.getReferenceById(id);
+    }
 }
