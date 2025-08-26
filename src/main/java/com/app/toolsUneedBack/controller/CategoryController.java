@@ -2,6 +2,8 @@ package com.app.toolsUneedBack.controller;
 
 import com.app.toolsUneedBack.entity.CategoryEntity;
 import com.app.toolsUneedBack.service.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +17,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @RequestMapping(path = "category")
 public class CategoryController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -23,37 +25,71 @@ public class CategoryController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public void newCategory(@RequestBody CategoryEntity category){
-        categoryService.newCategory(category);
+    public ResponseEntity<Void> newCategory(@RequestBody CategoryEntity category) {
+        try {
+            categoryService.newCategory(category);
+            return ResponseEntity.status(HttpStatus.CREATED).build(); // 201 Created
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build(); // 400 Bad Request
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500
+        }
     }
 
     @GetMapping
-    public List<CategoryEntity> findAllCategory(){
-        return this.categoryService.findAllCategories();
+    public ResponseEntity<List<CategoryEntity>> findAllCategory() {
+        try {
+            List<CategoryEntity> categories = categoryService.findAllCategories();
+            return ResponseEntity.ok(categories); // 200 OK
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500
+        }
     }
 
     @GetMapping(path = "{id}", produces = APPLICATION_JSON_VALUE)
-    public CategoryEntity getCategoryById(@PathVariable Long id){
-        return this.categoryService.findById(id);
+    public ResponseEntity<CategoryEntity> getCategoryById(@PathVariable Long id) {
+        try {
+            CategoryEntity category = categoryService.findById(id);
+            if (category != null) {
+                return ResponseEntity.ok(category); // 200 OK
+            } else {
+                return ResponseEntity.notFound().build(); // 404 Not Found
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         try {
             categoryService.deleteCategory(id);
-            return ResponseEntity.ok("Catégorie supprimée avec succès");
+            return ResponseEntity.noContent().build(); // 204 No Content (suppression réussie)
         } catch (IllegalStateException e) {
-            // ↑ L'exception est attrapée ici
-            return ResponseEntity.badRequest().body(e.getMessage());
-            // ↑ Retourne un HTTP 400 avec le message d'erreur
+            // Contrainte métier (sous-catégories liées)
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        } catch (DataIntegrityViolationException e) {
+            // Contrainte base de données
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erreur interne du serveur");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500
         }
     }
 
     @PutMapping(path = "{id}", consumes = APPLICATION_JSON_VALUE)
-    public void editCategory(@PathVariable Long id, @RequestBody CategoryEntity category){
-        this.categoryService.editCategory(id,category);
+    public ResponseEntity<Void> editCategory(@PathVariable Long id, @RequestBody CategoryEntity category) {
+        try {
+            categoryService.editCategory(id, category);
+            return ResponseEntity.noContent().build(); // 204 No Content (modification réussie)
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build(); // 400 Bad Request
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500
+        }
     }
 
 
