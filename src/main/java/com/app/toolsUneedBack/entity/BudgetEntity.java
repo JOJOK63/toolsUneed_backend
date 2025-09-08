@@ -7,7 +7,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "budgets")
@@ -46,4 +48,8 @@ public class BudgetEntity {
 //    @JsonBackReference // L'enfant ne sérialise pas le parent
    @JsonIgnoreProperties("budgets") // ignore uniquement le champ qui provoque la boucle
     private CustomerEntity customer;
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("budget")
+    private List<TransactionEntity> transactions = new ArrayList<>();
 }
