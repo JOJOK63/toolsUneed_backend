@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -54,7 +55,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
             // 2. Créer les sous-catégories
             log.info("📋 Création des sous-catégories...");
-            createSubCategories(categories);
+            List<SubCategoryEntity> subCategories = createSubCategories(categories);
 
             // 3. Créer les clients
             log.info("👥 Création des clients...");
@@ -66,7 +67,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
             // 5. Créer quelques transactions d'exemple
             log.info("💳 Création des transactions d'exemple...");
-            createSampleTransactions(budgets, categories);
+            createSampleTransactions(budgets, subCategories);
 
         } catch (Exception e) {
             log.error("❌ Erreur lors du peuplement de la base de données: ", e);
@@ -145,92 +146,86 @@ public class DatabaseSeeder implements CommandLineRunner {
         return savedCategories;
     }
 
-    private void createSubCategories(List<CategoryEntity> categories) {
-        // Alimentation (index 0)
-        CategoryEntity alimentation = categories.get(0);
+    private List<SubCategoryEntity> createSubCategories(List<CategoryEntity> categories) {
+
+        CategoryEntity alimentation   = categories.get(0);
+        CategoryEntity transport      = categories.get(1);
+        CategoryEntity logement       = categories.get(2);
+        CategoryEntity loisirs        = categories.get(3);
+        CategoryEntity sante          = categories.get(4);
+        CategoryEntity shopping       = categories.get(5);
+        CategoryEntity revenus        = categories.get(6);
+        CategoryEntity education      = categories.get(7);
+        CategoryEntity divertissement = categories.get(8);
+
         List<SubCategoryEntity> alimentationSubs = List.of(
-                SubCategoryEntity.builder().name("Courses").icon("🛒").category(alimentation).isActive(true).build(),
-                SubCategoryEntity.builder().name("Restaurant").icon("🍽️").category(alimentation).isActive(true).build(),
+                SubCategoryEntity.builder().name("Courses").icon("🛒").isActive(true).category(alimentation).build(),
+                SubCategoryEntity.builder().name("Restaurant").icon("🍽️").isActive(true).category(alimentation).build(),
                 SubCategoryEntity.builder().name("Fast Food").icon("🍔").category(alimentation).isActive(true).build(),
                 SubCategoryEntity.builder().name("Café").icon("☕").category(alimentation).isActive(true).build()
         );
 
-        // Transport (index 1)
-        CategoryEntity transport = categories.get(1);
         List<SubCategoryEntity> transportSubs = List.of(
-                SubCategoryEntity.builder().name("Essence").icon("⛽").category(transport).isActive(true).build(),
-                SubCategoryEntity.builder().name("Transport Public").icon("🚊").category(transport).isActive(true).build(),
-                SubCategoryEntity.builder().name("Taxi/Uber").icon("🚕").category(transport).isActive(true).build(),
-                SubCategoryEntity.builder().name("Parking").icon("🅿️").category(transport).isActive(true).build()
+                SubCategoryEntity.builder().name("Essence").icon("⛽").isActive(true).category(transport).build(),
+                SubCategoryEntity.builder().name("Transport Public").icon("🚊").isActive(true).category(transport).build(),
+                SubCategoryEntity.builder().name("Taxi/Uber").icon("🚕").isActive(true).category(transport).build(),
+                SubCategoryEntity.builder().name("Parking").icon("🅿️").isActive(true).category(transport).build()
         );
 
-        // Logement (index 2)
-        CategoryEntity logement = categories.get(2);
         List<SubCategoryEntity> logementSubs = List.of(
-                SubCategoryEntity.builder().name("Loyer").icon("🏡").category(logement).isActive(true).build(),
-                SubCategoryEntity.builder().name("Électricité").icon("⚡").category(logement).isActive(true).build(),
-                SubCategoryEntity.builder().name("Gaz").icon("🔥").category(logement).isActive(true).build(),
-                SubCategoryEntity.builder().name("Internet").icon("📶").category(logement).isActive(true).build()
+                SubCategoryEntity.builder().name("Loyer").icon("🏡").isActive(true).category(logement).build(),
+                SubCategoryEntity.builder().name("Électricité").icon("⚡").isActive(true).category(logement).build(),
+                SubCategoryEntity.builder().name("Gaz").icon("🔥").isActive(true).category(logement).build(),
+                SubCategoryEntity.builder().name("Internet").icon("📶").isActive(true).category(logement).build()
         );
 
         // Loisirs (index 3)
-        CategoryEntity loisirs = categories.get(3);
         List<SubCategoryEntity> loisirsSubs = List.of(
-                SubCategoryEntity.builder().name("Cinéma").icon("🎬").category(loisirs).isActive(true).build(),
-                SubCategoryEntity.builder().name("Sport").icon("⚽").category(loisirs).isActive(true).build(),
-                SubCategoryEntity.builder().name("Concerts").icon("🎵").category(loisirs).isActive(true).build(),
-                SubCategoryEntity.builder().name("Voyages").icon("✈️").category(loisirs).isActive(true).build()
+                SubCategoryEntity.builder().name("Cinéma").icon("🎬").isActive(true).category(loisirs).build(),
+                SubCategoryEntity.builder().name("Sport").icon("⚽").isActive(true).category(loisirs).build(),
+                SubCategoryEntity.builder().name("Concerts").icon("🎵").isActive(true).category(loisirs).build(),
+                SubCategoryEntity.builder().name("Voyages").icon("✈️").isActive(true).category(loisirs).build()
         );
 
         // Santé (index 4)
-        CategoryEntity sante = categories.get(4);
         List<SubCategoryEntity> santeSubs = List.of(
-                SubCategoryEntity.builder().name("Médecin").icon("👨‍⚕️").category(sante).isActive(true).build(),
-                SubCategoryEntity.builder().name("Pharmacie").icon("💊").category(sante).isActive(true).build(),
-                SubCategoryEntity.builder().name("Dentiste").icon("🦷").category(sante).isActive(true).build()
+                SubCategoryEntity.builder().name("Médecin").icon("👨‍⚕️").isActive(true).category(sante).build(),
+                SubCategoryEntity.builder().name("Pharmacie").icon("💊").isActive(true).category(sante).build(),
+                SubCategoryEntity.builder().name("Dentiste").icon("🦷").isActive(true).category(sante).build()
         );
 
         // Shopping (index 5)
-        CategoryEntity shopping = categories.get(5);
         List<SubCategoryEntity> shoppingSubs = List.of(
-                SubCategoryEntity.builder().name("Vêtements").icon("👕").category(shopping).isActive(true).build(),
-                SubCategoryEntity.builder().name("Électronique").icon("📱").category(shopping).isActive(true).build(),
-                SubCategoryEntity.builder().name("Maison").icon("🏠").category(shopping).isActive(true).build(),
-                SubCategoryEntity.builder().name("Cadeaux").icon("🎁").category(shopping).isActive(true).build()
+                SubCategoryEntity.builder().name("Vêtements").icon("👕").isActive(true).category(shopping).build(),
+                SubCategoryEntity.builder().name("Électronique").icon("📱").isActive(true).category(shopping).build(),
+                SubCategoryEntity.builder().name("Maison").icon("🏠").isActive(true).category(shopping).build(),
+                SubCategoryEntity.builder().name("Cadeaux").icon("🎁").isActive(true).category(shopping).build()
         );
 
         // Revenus (index 6)
-        CategoryEntity revenus = categories.get(6);
         List<SubCategoryEntity> revenusSubs = List.of(
-                SubCategoryEntity.builder().name("Salaire").icon("💼").category(revenus).isActive(true).build(),
-                SubCategoryEntity.builder().name("Freelance").icon("💻").category(revenus).isActive(true).build(),
-                SubCategoryEntity.builder().name("Prime").icon("🎁").category(revenus).isActive(true).build(),
-                SubCategoryEntity.builder().name("Investissements").icon("📈").category(revenus).isActive(true).build()
+                SubCategoryEntity.builder().name("Salaire").icon("💼").isActive(true).category(revenus).build(),
+                SubCategoryEntity.builder().name("Freelance").icon("💻").isActive(true).category(revenus).build(),
+                SubCategoryEntity.builder().name("Prime").icon("🎁").isActive(true).category(revenus).build(),
+                SubCategoryEntity.builder().name("Investissements").icon("📈").isActive(true).category(revenus).build()
         );
 
         // Éducation (index 7)
-        CategoryEntity education = categories.get(7);
         List<SubCategoryEntity> educationSubs = List.of(
-                SubCategoryEntity.builder().name("Livres").icon("📖").category(education).isActive(true).build(),
-                SubCategoryEntity.builder().name("Formation").icon("🎓").category(education).isActive(true).build(),
-                SubCategoryEntity.builder().name("Matériel").icon("✏️").category(education).isActive(true).build()
+                SubCategoryEntity.builder().name("Livres").icon("📖").isActive(true).category(education).build(),
+                SubCategoryEntity.builder().name("Formation").icon("🎓").isActive(true).category(education).build(),
+                SubCategoryEntity.builder().name("Matériel").icon("✏️").isActive(true).category(education).build()
         );
 
-        // Sauvegarder toutes les sous-catégories
-        subCategoryRepository.saveAll(alimentationSubs);
-        subCategoryRepository.saveAll(transportSubs);
-        subCategoryRepository.saveAll(logementSubs);
-        subCategoryRepository.saveAll(loisirsSubs);
-        subCategoryRepository.saveAll(santeSubs);
-        subCategoryRepository.saveAll(shoppingSubs);
-        subCategoryRepository.saveAll(revenusSubs);
-        subCategoryRepository.saveAll(educationSubs);
+        List<SubCategoryEntity> allSubs = Stream.of(
+                alimentationSubs, transportSubs,logementSubs,loisirsSubs,santeSubs,shoppingSubs,revenusSubs,educationSubs
+        ).flatMap(List::stream).toList();
 
-        int totalSubCategories = alimentationSubs.size() + transportSubs.size() +
-                logementSubs.size() + loisirsSubs.size() +
-                santeSubs.size() + shoppingSubs.size() +
-                revenusSubs.size() + educationSubs.size();
-        log.info("✅ Créé {} sous-catégories", totalSubCategories);
+        subCategoryRepository.saveAll(allSubs);
+
+        log.info("✅ Créé {} sous-catégories", allSubs.size());
+
+        return allSubs;
     }
 
     private List<CustomerEntity> createCustomers() {
@@ -345,8 +340,58 @@ public class DatabaseSeeder implements CommandLineRunner {
         return savedBudgets;
     }
 
-    private void createSampleTransactions(List<BudgetEntity> budgets, List<CategoryEntity> categories) {
+    private SubCategoryEntity findSub(List<SubCategoryEntity> list, String name) {
+        return list.stream()
+                .filter(s -> s.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("SubCategory not found: " + name));
+    }
+
+
+    private void createSampleTransactions(List<BudgetEntity> budgets, List<SubCategoryEntity> subCategories) {
+
+        // Récupération pratique par nom (plus lisible)
+        SubCategoryEntity courses          = findSub(subCategories, "Courses");
+        SubCategoryEntity restaurant       = findSub(subCategories, "Restaurant");
+        SubCategoryEntity fastfood         = findSub(subCategories, "Fast Food");
+        SubCategoryEntity cafe             = findSub(subCategories, "Café");
+
+        SubCategoryEntity essence          = findSub(subCategories, "Essence");
+        SubCategoryEntity transportPublic  = findSub(subCategories, "Transport Public");
+        SubCategoryEntity taxiUber         = findSub(subCategories, "Taxi/Uber");
+        SubCategoryEntity parking          = findSub(subCategories, "Parking");
+
+        SubCategoryEntity loyer            = findSub(subCategories, "Loyer");
+        SubCategoryEntity electricite      = findSub(subCategories, "Électricité");
+        SubCategoryEntity gaz              = findSub(subCategories, "Gaz");
+        SubCategoryEntity internet         = findSub(subCategories, "Internet");
+
+        SubCategoryEntity cinema           = findSub(subCategories, "Cinéma");
+        SubCategoryEntity sport            = findSub(subCategories, "Sport");
+        SubCategoryEntity concerts         = findSub(subCategories, "Concerts");
+        SubCategoryEntity voyages          = findSub(subCategories, "Voyages");
+
+        SubCategoryEntity medecin          = findSub(subCategories, "Médecin");
+        SubCategoryEntity pharmacie        = findSub(subCategories, "Pharmacie");
+        SubCategoryEntity dentiste         = findSub(subCategories, "Dentiste");
+
+        SubCategoryEntity vetements        = findSub(subCategories, "Vêtements");
+        SubCategoryEntity electronique     = findSub(subCategories, "Électronique");
+        SubCategoryEntity maison           = findSub(subCategories, "Maison");
+        SubCategoryEntity cadeaux          = findSub(subCategories, "Cadeaux");
+
+        SubCategoryEntity salaire          = findSub(subCategories, "Salaire");
+        SubCategoryEntity freelance        = findSub(subCategories, "Freelance");
+        SubCategoryEntity prime            = findSub(subCategories, "Prime");
+        SubCategoryEntity investissements  = findSub(subCategories, "Investissements");
+
+        SubCategoryEntity livres           = findSub(subCategories, "Livres");
+        SubCategoryEntity formation        = findSub(subCategories, "Formation");
+        SubCategoryEntity materiel         = findSub(subCategories, "Matériel");
+
+
         List<TransactionEntity> transactions = List.of(
+
                 // ========== REVENUS ==========
                 TransactionEntity.builder()
                         .name("Salaire Février")
@@ -354,25 +399,16 @@ public class DatabaseSeeder implements CommandLineRunner {
                         .detail("Salaire net mensuel")
                         .type(TransactionType.INCOME)
                         .budget(budgets.get(0))
-                        .category(categories.get(6)) // Revenus
+                        .subCategory(salaire)
                         .build(),
 
                 TransactionEntity.builder()
-                        .name("Remboursement frais")
-                        .amount(new BigDecimal("127.50"))
-                        .detail("Remboursement frais de transport")
+                        .name("Prime annuelle")
+                        .amount(new BigDecimal("450.00"))
+                        .detail("Prime trimestrielle")
                         .type(TransactionType.INCOME)
                         .budget(budgets.get(0))
-                        .category(categories.get(6)) // Revenus
-                        .build(),
-
-                TransactionEntity.builder()
-                        .name("Salaire Marie")
-                        .amount(new BigDecimal("2800.00"))
-                        .detail("Salaire mensuel")
-                        .type(TransactionType.INCOME)
-                        .budget(budgets.get(2))
-                        .category(categories.get(6)) // Revenus
+                        .subCategory(prime)
                         .build(),
 
                 TransactionEntity.builder()
@@ -381,26 +417,18 @@ public class DatabaseSeeder implements CommandLineRunner {
                         .detail("Travail à temps partiel")
                         .type(TransactionType.INCOME)
                         .budget(budgets.get(4))
-                        .category(categories.get(6)) // Revenus
+                        .subCategory(freelance)
                         .build(),
 
-                // ========== DÉPENSES ALIMENTATION ==========
+
+                // ========== ALIMENTATION ==========
                 TransactionEntity.builder()
                         .name("Courses Leclerc")
                         .amount(new BigDecimal("89.45"))
                         .detail("Courses hebdomadaires")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(0))
-                        .category(categories.get(0)) // Alimentation
-                        .build(),
-
-                TransactionEntity.builder()
-                        .name("Boulangerie")
-                        .amount(new BigDecimal("12.80"))
-                        .detail("Pain et viennoiseries")
-                        .type(TransactionType.EXPENSE)
-                        .budget(budgets.get(3))
-                        .category(categories.get(0)) // Alimentation
+                        .subCategory(courses)
                         .build(),
 
                 TransactionEntity.builder()
@@ -409,7 +437,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                         .detail("Dîner en amoureux")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(2))
-                        .category(categories.get(0)) // Alimentation
+                        .subCategory(restaurant)
                         .build(),
 
                 TransactionEntity.builder()
@@ -418,126 +446,141 @@ public class DatabaseSeeder implements CommandLineRunner {
                         .detail("Sandwich du midi")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(4))
-                        .category(categories.get(0)) // Alimentation
+                        .subCategory(fastfood)
                         .build(),
 
-                // ========== DÉPENSES TRANSPORT ==========
+
+                // ========== TRANSPORT ==========
                 TransactionEntity.builder()
                         .name("Station Essence Shell")
                         .amount(new BigDecimal("67.20"))
                         .detail("Plein d'essence")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(0))
-                        .category(categories.get(1)) // Transport
+                        .subCategory(essence)
                         .build(),
 
                 TransactionEntity.builder()
                         .name("Carte Navigo")
                         .amount(new BigDecimal("84.10"))
-                        .detail("Abonnement mensuel")
+                        .detail("Pass mensuel")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(2))
-                        .category(categories.get(1)) // Transport
+                        .subCategory(transportPublic)
                         .build(),
 
                 TransactionEntity.builder()
-                        .name("Uber Eats Livraison")
-                        .amount(new BigDecimal("4.99"))
-                        .detail("Frais de livraison")
+                        .name("Taxi Retour Soirée")
+                        .amount(new BigDecimal("14.90"))
+                        .detail("Course Uber")
                         .type(TransactionType.EXPENSE)
-                        .budget(budgets.get(4))
-                        .category(categories.get(1)) // Transport
+                        .budget(budgets.get(5))
+                        .subCategory(taxiUber)
                         .build(),
 
-                // ========== DÉPENSES LOGEMENT ==========
+
+                // ========== LOGEMENT ==========
                 TransactionEntity.builder()
                         .name("Loyer Appartement")
                         .amount(new BigDecimal("850.00"))
-                        .detail("Loyer mensuel")
+                        .detail("Mensuel")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(0))
-                        .category(categories.get(2)) // Logement
+                        .subCategory(loyer)
                         .build(),
 
                 TransactionEntity.builder()
                         .name("Facture EDF")
                         .amount(new BigDecimal("78.90"))
-                        .detail("Électricité bimensuelle")
+                        .detail("Électricité")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(2))
-                        .category(categories.get(2)) // Logement
+                        .subCategory(electricite)
                         .build(),
 
                 TransactionEntity.builder()
                         .name("Free Internet")
                         .amount(new BigDecimal("29.99"))
-                        .detail("Abonnement fibre")
+                        .detail("Fibre")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(4))
-                        .category(categories.get(2)) // Logement
+                        .subCategory(internet)
                         .build(),
 
-                // ========== DÉPENSES LOISIRS ==========
+
+                // ========== LOISIRS ==========
                 TransactionEntity.builder()
                         .name("Pathé Cinéma")
                         .amount(new BigDecimal("22.00"))
-                        .detail("2 places pour le dernier film")
+                        .detail("Séance du soir")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(1))
-                        .category(categories.get(3)) // Loisirs
+                        .subCategory(cinema)
                         .build(),
 
                 TransactionEntity.builder()
                         .name("Basic Fit")
                         .amount(new BigDecimal("19.99"))
-                        .detail("Abonnement salle de sport")
+                        .detail("Abonnement")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(5))
-                        .category(categories.get(3)) // Loisirs
+                        .subCategory(sport)
                         .build(),
 
-                // ========== DÉPENSES SHOPPING ==========
+
+                // ========== SHOPPING ==========
                 TransactionEntity.builder()
                         .name("H&M")
                         .amount(new BigDecimal("47.95"))
-                        .detail("T-shirts et jean")
+                        .detail("Habits")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(2))
-                        .category(categories.get(5)) // Shopping
+                        .subCategory(vetements)
                         .build(),
 
                 TransactionEntity.builder()
                         .name("Amazon")
                         .amount(new BigDecimal("156.78"))
-                        .detail("Casque audio et câbles")
+                        .detail("Matériel électronique")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(6))
-                        .category(categories.get(5)) // Shopping
+                        .subCategory(electronique)
                         .build(),
 
-                // ========== DÉPENSES SANTÉ ==========
+
+                // ========== SANTÉ ==========
                 TransactionEntity.builder()
-                        .name("Pharmacie Central")
+                        .name("Pharmacie Centrale")
                         .amount(new BigDecimal("23.45"))
-                        .detail("Médicaments et vitamines")
+                        .detail("Médicaments")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(0))
-                        .category(categories.get(4)) // Santé
+                        .subCategory(pharmacie)
                         .build(),
 
-                // ========== DÉPENSES ÉDUCATION ==========
                 TransactionEntity.builder()
-                        .name("Librairie FNAC")
+                        .name("Dentiste")
+                        .amount(new BigDecimal("62.00"))
+                        .detail("Consultation")
+                        .type(TransactionType.EXPENSE)
+                        .budget(budgets.get(2))
+                        .subCategory(dentiste)
+                        .build(),
+
+
+                // ========== ÉDUCATION ==========
+                TransactionEntity.builder()
+                        .name("FNAC")
                         .amount(new BigDecimal("45.90"))
-                        .detail("Livre de programmation Java")
+                        .detail("Livre Java")
                         .type(TransactionType.EXPENSE)
                         .budget(budgets.get(4))
-                        .category(categories.get(7)) // Éducation
+                        .subCategory(livres)
                         .build()
         );
 
-        List<TransactionEntity> savedTransactions = transactionRepository.saveAll(transactions);
-        log.info("✅ Créé {} transactions", savedTransactions.size());
+        transactionRepository.saveAll(transactions);
+        log.info("✅ Créé {} transactions", transactions.size());
     }
 
     private void printSummary() {

@@ -64,7 +64,13 @@ public class SubCategoryServiceImpl implements SubCategoryService{
             subCategoryFromBDD.setCategory(categoryProxy);
         }
 
+
+
         this.subCategoryRepository.save(subCategoryFromBDD);
     }
 
+    @Override
+    public SubCategoryEntity getReferenceById(Long id) {
+        return subCategoryRepository.getReferenceById(id);
+    }
 }

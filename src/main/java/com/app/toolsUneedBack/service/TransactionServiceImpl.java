@@ -1,6 +1,7 @@
 package com.app.toolsUneedBack.service;
 
 import com.app.toolsUneedBack.entity.BudgetEntity;
+import com.app.toolsUneedBack.entity.SubCategoryEntity;
 import com.app.toolsUneedBack.entity.TransactionEntity;
 import com.app.toolsUneedBack.repository.CustomerRepository;
 import com.app.toolsUneedBack.repository.TransactionRepository;
@@ -14,11 +15,17 @@ public class TransactionServiceImpl implements TransactionService{
 
     private TransactionRepository transactionRepository;
     private BudgetService budgetService;
+    private SubCategoryService subCategoryService;
 
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository, BudgetService budgetService){
+    public TransactionServiceImpl(
+            TransactionRepository transactionRepository,
+            BudgetService budgetService,
+            SubCategoryService subCategoryService
+    ){
         this.transactionRepository = transactionRepository;
         this.budgetService = budgetService;
+        this.subCategoryService = subCategoryService;
     }
 
     @Override
@@ -28,6 +35,11 @@ public class TransactionServiceImpl implements TransactionService{
         //proxy permet de simuler un objet
         BudgetEntity budgetProxy = budgetService.getReferenceById(budgetId);
         transaction.setBudget(budgetProxy);
+
+        Long subCategoryId = transaction.getSubCategory().getId();
+        SubCategoryEntity subCategoryProxy = subCategoryService.getReferenceById(subCategoryId);
+        transaction.setSubCategory(subCategoryProxy);
+
         this.transactionRepository.save(transaction);
     }
 
@@ -66,6 +78,12 @@ public class TransactionServiceImpl implements TransactionService{
                 Long budgetId = transaction.getBudget().getId();
                 BudgetEntity budgetProxy = budgetService.getReferenceById(budgetId);
                 transactionEntityFromBDD.setBudget(budgetProxy);
+            }
+
+            if(transaction.getSubCategory() != null && transaction.getSubCategory().getId() != null) {
+                Long subCategoryId = transaction.getSubCategory().getId();
+                SubCategoryEntity subCategoryProxy = subCategoryService.getReferenceById(subCategoryId);
+                transactionEntityFromBDD.setSubCategory(subCategoryProxy);
             }
 
             this.transactionRepository.save(transactionEntityFromBDD);

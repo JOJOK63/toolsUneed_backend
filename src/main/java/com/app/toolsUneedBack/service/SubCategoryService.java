@@ -10,5 +10,5 @@ public interface SubCategoryService {
     SubCategoryEntity findByid(Long id);
     void deleteSubCategory(Long id);
     void editSubCategory(Long id, SubCategoryEntity subCategory);
-
+    SubCategoryEntity getReferenceById(Long id);
 }

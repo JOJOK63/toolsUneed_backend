@@ -46,9 +46,9 @@ public class TransactionEntity {
 //    @JsonIgnoreProperties("transactions") // Si tu décides plus tard de faire du bidirectionnel
     private BudgetEntity budget;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private CategoryEntity category;
+//    @ManyToOne
+//    @JoinColumn(name = "category_id", nullable = false)
+//    private CategoryEntity category;
 
     @ManyToOne
     @JoinColumn(name = "subcategory_id") // nullable = true par défaut
